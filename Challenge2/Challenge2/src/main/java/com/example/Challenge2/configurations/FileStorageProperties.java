@@ -2,7 +2,7 @@ package com.example.Challenge2.configurations;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 @Component
-@ConfigurationProperties(prefix = "img")
+@ConfigurationProperties(prefix = "file")
 public class FileStorageProperties {
     private String uploadDir;
 

@@ -5,6 +5,7 @@ import com.example.Challenge2.responses.MessageResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
     List<User> getAllUsers();
@@ -16,4 +17,11 @@ public interface UserService {
     User updateUserByID(int id, User user);
 
     ResponseEntity<MessageResponse> deleteUserById(int id);
+
+    User findByEmail(String email);
+
+    Boolean existsByEmail(String email);
+
+    Integer numberOfUsers();
+
 }

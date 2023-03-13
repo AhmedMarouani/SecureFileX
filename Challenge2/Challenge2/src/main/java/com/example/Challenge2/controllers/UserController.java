@@ -15,6 +15,24 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/findByEmail")
+    public User findByEmail(String email){
+        User UserByEmail = userService.findByEmail(email);
+        return UserByEmail;
+    }
+
+    @GetMapping("/existsByEmail")
+    public Boolean existsByEmail(String email){
+        Boolean UserExistsByEmail = userService.existsByEmail(email);
+        return UserExistsByEmail;
+    }
+
+    @GetMapping("/numberOfUsers")
+    public Integer numberOfUsers(){
+        Integer numberOfUsers = userService.numberOfUsers();
+        return numberOfUsers;
+    }
+
     @GetMapping("/")
     public List<User> getAllUsers(){
         List<User> Users =  userService.getAllUsers();

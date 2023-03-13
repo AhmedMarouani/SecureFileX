@@ -57,4 +57,21 @@ public class UserServiceImp implements UserService{
             return ResponseEntity.notFound().build();
         }
     }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public Boolean existsByEmail(String email) {
+        return  userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public Integer numberOfUsers() {
+        return userRepository.numberOfUsers();
+    }
+
+
 }
