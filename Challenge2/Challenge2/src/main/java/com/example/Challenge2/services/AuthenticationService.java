@@ -25,12 +25,20 @@ public class AuthenticationService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
+                .age(request.getAge())
+                .createdAt(request.getCreatedAt())
+                .updatedAt(request.getUpdatedAt())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .erole(ERole.USER)
                 .build();
-        userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+                if(!userRepository.existsByEmail(request.getEmail())){
+                    userRepository.save(user);
+                    var jwtToken = jwtService.generateToken(user);
+                    return AuthenticationResponse.builder().token(jwtToken).build();
+                }else{
+                    throw new RuntimeException("Email already exists");
+                }
+
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -41,4 +49,6 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);//generate token
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
+
+
 }
