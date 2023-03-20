@@ -23,12 +23,13 @@ public class AppConfig {
 
     private final UserRepository userRepository;
 
-    @Bean
-    public UserDetailsService userDetailsService(){
-        return  username -> userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
-    // data access object
+        @Bean
+        public UserDetailsService userDetailsService(){
+            return  username -> userRepository.findByEmail(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        }
+    // data access object used in security config to configure the authenticationProvider and return an isntance of
+    //the DaoAuthenticationProvider
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

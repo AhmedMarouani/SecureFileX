@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    //this class permits unauthenticated access to certain endpoints and requires authentication for others
     private final JwtAuthenticationFilter jwtAuthFiler;
     private final AuthenticationProvider authenticationProvider;
 
@@ -28,10 +29,11 @@ public class SecurityConfig {
                 .authenticated()
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)//this way spring will create a new session for each request
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)//this way spring will not create an HttpSession object in the server for each authenticated user
+                //the SessionCreationPolicy could be set to stateless or always or if needed
                 .and()
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFiler, UsernamePasswordAuthenticationFilter.class);
+                .authenticationProvider(authenticationProvider)//responsible for authenticating a user
+                .addFilterBefore(jwtAuthFiler, UsernamePasswordAuthenticationFilter.class);//used to add filter implementation
         return http.build();
     }
 }

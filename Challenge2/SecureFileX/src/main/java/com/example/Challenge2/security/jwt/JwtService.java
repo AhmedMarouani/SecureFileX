@@ -31,7 +31,19 @@ public class JwtService {
     // then applies the claimsResolver function to extract the specific claim.
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
         final Claims claims = extractAllClaims(token);
+        //Claims are pieces of information about the subject of the token
         return claimsResolver.apply(claims);
+    }
+
+    //returns all claims of the token as a Claims object by extracting the token's body  using Jwts builder
+    //Claims are pieces of information about the subject of the token
+    private Claims extractAllClaims(String token){
+        return Jwts.
+                parserBuilder().
+                setSigningKey(getSigningKey()).// used to verify the token and set its signature.
+                build().
+                parseClaimsJws(token).
+                getBody();
     }
 
     public String generateToken(UserDetails userDetails){
@@ -61,15 +73,7 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    //returns all claims of the token as a Claims object by extracting the token's body  using Jwts builder
-    private Claims extractAllClaims(String token){
-        return Jwts.
-        parserBuilder().
-        setSigningKey(getSigningKey()).// used to verify the token's signature.
-        build().
-        parseClaimsJws(token).
-        getBody();
-    }
+
 
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);

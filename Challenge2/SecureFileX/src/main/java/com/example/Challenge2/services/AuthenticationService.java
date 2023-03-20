@@ -1,9 +1,6 @@
 package com.example.Challenge2.services;
 
-import com.example.Challenge2.entities.AuthenticationRequest;
-import com.example.Challenge2.entities.ERole;
-import com.example.Challenge2.entities.RegisterRequest;
-import com.example.Challenge2.entities.User;
+import com.example.Challenge2.entities.*;
 import com.example.Challenge2.repositories.UserRepository;
 import com.example.Challenge2.responses.AuthenticationResponse;
 import com.example.Challenge2.security.jwt.JwtService;
@@ -20,6 +17,8 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
+    private final SendMailService sendMailService;
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
                 .firstName(request.getFirstName())
@@ -34,6 +33,11 @@ public class AuthenticationService {
                 if(!userRepository.existsByEmail(request.getEmail())){
                     userRepository.save(user);
                     var jwtToken = jwtService.generateToken(user);
+                    EmailRequest emailRequest = new EmailRequest();
+                    emailRequest.setTo(user.getEmail());
+                    emailRequest.setSubject("Registration successful");
+                    emailRequest.setText("Dear " + user.getFirstName() + ",\n\nThank you for registering with us.");
+                    sendMailService.sendTextEmail(emailRequest);
                     return AuthenticationResponse.builder().token(jwtToken).build();
                 }else{
                     throw new RuntimeException("Email already exists");
